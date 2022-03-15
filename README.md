@@ -1,4 +1,4 @@
-# **Eau Claire's Salon**
+# **University Registrar**
 #### _a C# MVC University registrar app to keep track of students and courses._
 
 #### by **Erin McCulley & John Whitten**
