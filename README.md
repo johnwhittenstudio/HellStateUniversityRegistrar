@@ -17,7 +17,7 @@
 
 ## Description
 
-An app for a University registrar to keep track of students and courses.
+An app for a University registrar to keep track departments, courses offered, and students enrolled.
 
 ### Schema
 
