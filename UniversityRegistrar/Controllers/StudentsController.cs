@@ -24,17 +24,23 @@ namespace UniversityRegistrar.Controllers
     public ActionResult Create()
     {
       ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "Name");
+      ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "DepartmentName");
       return View();
     }
 
     [HttpPost]
-    public ActionResult Create(Student student, int CourseId)
+    public ActionResult Create(Student student, int CourseId, int DepartmentId)
     {
       _db.Students.Add(student);
       _db.SaveChanges();
       if (CourseId != 0)
       {
-        _db.CourseStudent.Add(new CourseStudent() { CourseId = CourseId, StudentId = student.StudentId });
+        _db.CourseDepartmentStudent.Add(new CourseDepartmentStudent() { CourseId = CourseId, StudentId = student.StudentId });
+        _db.SaveChanges();
+      }
+      else if (DepartmentId != 0)
+      {
+        _db.CourseDepartmentStudent.Add(new CourseDepartmentStudent() { DepartmentId = DepartmentId, StudentId = student.StudentId });
         _db.SaveChanges();
       }
       return RedirectToAction("Index");
@@ -45,6 +51,8 @@ namespace UniversityRegistrar.Controllers
       var thisStudent = _db.Students
           .Include(student => student.JoinEntities)
           .ThenInclude(join => join.Course)
+          .Include(student => student.JoinEntities)
+          .ThenInclude(join => join.Department)
           .FirstOrDefault(student => student.StudentId == id);
       return View(thisStudent);
     }
@@ -53,15 +61,22 @@ namespace UniversityRegistrar.Controllers
     {
       var thisStudent = _db.Students.FirstOrDefault(student => student.StudentId == id);
       ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "Name");
+      ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "DepartmentName");
       return View(thisStudent);
     }
 
     [HttpPost]
-    public ActionResult Edit(Student student, int CourseId)
+    public ActionResult Edit(Student student, int CourseId, int DepartmentId)
     {
       if (CourseId != 0)
       {
-        _db.CourseStudent.Add(new CourseStudent() { CourseId = CourseId, StudentId = student.StudentId });
+      _db.CourseDepartmentStudent.Add(new CourseDepartmentStudent() { CourseId = CourseId, StudentId = student.StudentId });
+      _db.Entry(student).State = EntityState.Modified;
+      _db.SaveChanges();
+      }
+      else if (DepartmentId != 0)
+      {
+        _db.CourseDepartmentStudent.Add(new CourseDepartmentStudent() { DepartmentId = DepartmentId, StudentId = student.StudentId });        
       }
       _db.Entry(student).State = EntityState.Modified;
       _db.SaveChanges();
@@ -75,12 +90,32 @@ namespace UniversityRegistrar.Controllers
       return View(thisStudent);
     }
 
+
     [HttpPost]
     public ActionResult AddCourse(Student student, int CourseId)
     {
       if (CourseId != 0)
       {
-        _db.CourseStudent.Add(new CourseStudent() { CourseId = CourseId, StudentId = student.StudentId });
+        _db.CourseDepartmentStudent.Add(new CourseDepartmentStudent() { CourseId = CourseId, StudentId = student.StudentId });
+        _db.SaveChanges();
+      }
+      return RedirectToAction("Index");
+    }
+
+
+    public ActionResult AddDepartment(int id)
+    {
+      var thisStudent = _db.Students.FirstOrDefault(student => student.StudentId == id);
+      ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "DepartmentName");
+      return View(thisStudent);
+    }
+
+    [HttpPost]
+    public ActionResult AddDepartment(Student student, int CourseId, int DepartmentId)
+    {
+      if (DepartmentId != 0)
+      {
+        _db.CourseDepartmentStudent.Add(new CourseDepartmentStudent() { DepartmentId = DepartmentId, CourseId = CourseId });
         _db.SaveChanges();
       }
       return RedirectToAction("Index");
@@ -104,8 +139,17 @@ namespace UniversityRegistrar.Controllers
     [HttpPost]
     public ActionResult DeleteCourse(int joinId)
     {
-      var joinEntry = _db.CourseStudent.FirstOrDefault(entry => entry.CourseStudentId == joinId);
-      _db.CourseStudent.Remove(joinEntry);
+      var joinEntry = _db.CourseDepartmentStudent.FirstOrDefault(entry => entry.CourseDepartmentStudentId == joinId);
+      _db.CourseDepartmentStudent.Remove(joinEntry);
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    }
+
+    [HttpPost]
+    public ActionResult DeleteDepartment(int joinId)
+    {
+      var joinEntry = _db.CourseDepartmentStudent.FirstOrDefault(entry => entry.CourseDepartmentStudentId == joinId);
+      _db.CourseDepartmentStudent.Remove(joinEntry);
       _db.SaveChanges();
       return RedirectToAction("Index");
     }

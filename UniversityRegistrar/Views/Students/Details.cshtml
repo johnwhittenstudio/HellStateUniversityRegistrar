@@ -11,7 +11,7 @@
 
 @if (@Model.JoinEntities.Count == 0)
 {
-  <p>This student does not belong to any courses</p>
+  <p>This student does not belong to any courses or departments</p>
 }
 else
 {
@@ -22,7 +22,19 @@ else
       <li>@join.Course.Name</li>
       @using (Html.BeginForm("DeleteCourse", "Students"))
       {
-        @Html.Hidden("joinId", @join.CourseStudentId)
+        @Html.Hidden("joinId", @join.CourseDepartmentStudentId)
+        <input type="submit" value="Delete" />
+      }
+    }
+  </ul>
+  <h4>Departments the student belongs to:</h4>
+  <ul>
+  @foreach (var join in Model.JoinEntities)
+    {
+      <li>@join.Department.DepartmentName</li>
+      @using (Html.BeginForm("DeleteDepartment", "Students"))
+      {
+        @Html.Hidden("joinId", @join.CourseDepartmentStudentId)
         <input type="submit" value="Delete" />
       }
     }
@@ -30,6 +42,7 @@ else
 }
 
 <p>@Html.ActionLink("Add a Course", "AddCourse", new { id = Model.StudentId })</p>
+<p>@Html.ActionLink("Add a Department", "AddDepartment", new { id = Model.StudentId })</p>
 
 <p>@Html.ActionLink("Back to list", "Index")</p>
 <p>@Html.ActionLink("Edit Student", "Edit", new { id = Model.StudentId })</p>

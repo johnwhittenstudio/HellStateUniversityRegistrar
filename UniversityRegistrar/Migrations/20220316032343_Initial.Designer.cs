@@ -8,7 +8,7 @@ using UniversityRegistrar.Models;
 namespace UniversityRegistrar.Migrations
 {
     [DbContext(typeof(UniversityRegistrarContext))]
-    [Migration("20220315034417_Initial")]
+    [Migration("20220316032343_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,25 +35,44 @@ namespace UniversityRegistrar.Migrations
                     b.ToTable("Courses");
                 });
 
-            modelBuilder.Entity("UniversityRegistrar.Models.CourseStudent", b =>
+            modelBuilder.Entity("UniversityRegistrar.Models.CourseDepartmentStudent", b =>
                 {
-                    b.Property<int>("CourseStudentId")
+                    b.Property<int>("CourseDepartmentStudentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
 
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
-                    b.HasKey("CourseStudentId");
+                    b.HasKey("CourseDepartmentStudentId");
 
                     b.HasIndex("CourseId");
 
+                    b.HasIndex("DepartmentId");
+
                     b.HasIndex("StudentId");
 
-                    b.ToTable("CourseStudent");
+                    b.ToTable("CourseDepartmentStudent");
+                });
+
+            modelBuilder.Entity("UniversityRegistrar.Models.Department", b =>
+                {
+                    b.Property<int>("DepartmentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("DepartmentName")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("DepartmentId");
+
+                    b.ToTable("Departments");
                 });
 
             modelBuilder.Entity("UniversityRegistrar.Models.Student", b =>
@@ -73,11 +92,17 @@ namespace UniversityRegistrar.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("UniversityRegistrar.Models.CourseStudent", b =>
+            modelBuilder.Entity("UniversityRegistrar.Models.CourseDepartmentStudent", b =>
                 {
                     b.HasOne("UniversityRegistrar.Models.Course", "Course")
                         .WithMany("JoinEntities")
                         .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UniversityRegistrar.Models.Department", "Department")
+                        .WithMany("JoinEntities")
+                        .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -89,10 +114,17 @@ namespace UniversityRegistrar.Migrations
 
                     b.Navigation("Course");
 
+                    b.Navigation("Department");
+
                     b.Navigation("Student");
                 });
 
             modelBuilder.Entity("UniversityRegistrar.Models.Course", b =>
+                {
+                    b.Navigation("JoinEntities");
+                });
+
+            modelBuilder.Entity("UniversityRegistrar.Models.Department", b =>
                 {
                     b.Navigation("JoinEntities");
                 });

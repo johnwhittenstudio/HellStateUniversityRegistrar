@@ -11,11 +11,11 @@
 
 @if(@Model.JoinEntities.Count == 0)
 {
-  <p>This course does not contain any items</p>
+  <p>This course does not contain any students</p>
 }
 else
 {
-  <h4>Items the course contains:</h4>
+  <h4>Students the course contains:</h4>
   <ul>
   @foreach(var join in Model.JoinEntities)
   {
