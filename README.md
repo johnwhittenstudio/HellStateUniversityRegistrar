@@ -1,6 +1,6 @@
-# **University Registrar**
+# **🔥 Hell State University Registrar 🔥**
 
-#### _a C# MVC University registrar app to keep track of students and courses._
+#### _a C# MVC University registrar app to keep track of students, courses, and departments._
 
 #### by **Erin McCulley & John Whitten**
 
@@ -71,7 +71,7 @@ An app for a University registrar to keep track departments, courses offered, an
 
 ## Known Bugs
 
-- _None._
+- So many! 🐜 🦟 🐞 🐛 🐝 🕷️ 🦗 🦠
 
 ## License
 
