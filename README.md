@@ -71,7 +71,7 @@ An app for a University registrar to keep track departments, courses offered, an
 
 ## Known Bugs
 
-- So many! 🐜 🦟 🐞 🐛 🐝 🕷️ 🦗 🦠
+- Better call an exterminator! 🐜 🦟 🐞 🐛 🐝 🕷️ 🦗 🦠
 
 ## License
 

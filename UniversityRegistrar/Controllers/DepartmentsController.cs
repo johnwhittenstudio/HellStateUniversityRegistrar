@@ -36,15 +36,15 @@ namespace UniversityRegistrar.Controllers
 
     public ActionResult Details(int id)
     {
-      var thisDepartment = _db.Departments
-          .Include(department => department.JoinEntities)
-          .ThenInclude(join => join.Student)
+      Department thisDepartment = _db.Departments
+          .Include(department => department.Courses)
+          .ThenInclude(join => join.Course)
           .FirstOrDefault(department => department.DepartmentId == id);
       return View(thisDepartment);
     }
     public ActionResult Edit(int id)
     {
-      var thisDepartment = _db.Departments.FirstOrDefault(department => department.DepartmentId == id);
+      Department thisDepartment = _db.Departments.FirstOrDefault(department => department.DepartmentId == id);
       return View(thisDepartment);
     }
 
@@ -58,14 +58,20 @@ namespace UniversityRegistrar.Controllers
 
     public ActionResult Delete(int id)
     {
-      var thisDepartment = _db.Departments.FirstOrDefault(department => department.DepartmentId == id);
+      Department thisDepartment = _db.Departments.FirstOrDefault(department => department.DepartmentId == id);
       return View(thisDepartment);
     }
 
     [HttpPost, ActionName("Delete")]
     public ActionResult DeleteConfirmed(int id)
     {
-      var thisDepartment = _db.Departments.FirstOrDefault(department => department.DepartmentId == id);
+      Department thisDepartment = _db.Departments.FirstOrDefault(department => department.DepartmentId == id);
+     
+      List<CourseDepartmentStudent> joins = _db.CourseDepartmentStudents.Where(join => join.DepartmentId == id).ToList();
+      foreach (CourseDepartmentStudent join in joins) 
+      {
+        _db.CourseDepartmentStudents.Remove(join);
+      }
       _db.Departments.Remove(thisDepartment);
       _db.SaveChanges();
       return RedirectToAction("Index");

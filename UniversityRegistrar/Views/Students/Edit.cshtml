@@ -3,10 +3,11 @@
 }
 
 @model UniversityRegistrar.Models.Student
-
+<div class="container">
+<br>
 <h2>Edit</h2>
 
-<h4>Edit this student: @Html.DisplayFor(model => model.Name)</h4>
+<h4>Edit this Student: @Html.DisplayFor(model => model.Name)</h4>
 
 @using (Html.BeginForm())
 {
@@ -15,13 +16,15 @@
   @Html.LabelFor(model => model.Name)
   @Html.EditorFor(model => model.Name)
 
-  @Html.LabelFor(model => model.EnrollmentDate)
-  @Html.TextBoxFor(model => model.EnrollmentDate)
+  @Html.LabelFor(model => model.Enrolled)
+  @Html.TextBoxFor(model => model.Enrolled)
 
   @Html.Label("Select course")
-  @Html.DropDownList("CourseId")
+  @Html.DropDownList("CourseId", "CourseName")
 
   <input type="submit" value="Save" />
 }
-
-<p>@Html.ActionLink("Back to list", "Index")</p>
+<br>
+<p>@Html.ActionLink("Back to Students", "Index")</p>
+<p>@Html.ActionLink("Home", "Index", "Home")</p>
+</div>

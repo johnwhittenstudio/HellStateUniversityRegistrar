@@ -3,10 +3,11 @@
 }
 
 @model UniversityRegistrar.Models.Department
-
+<div class="container">
+<br>
 <h2>Edit</h2>
 
-<h4>Edit this department: @Html.DisplayFor(model => model.DepartmentName)</h4>
+<h4>Edit this Department: @Html.DisplayFor(model => model.DepartmentName)</h4>
 
 @using (Html.BeginForm())
 {
@@ -18,4 +19,7 @@
 
   <input type="submit" value="Save" />
 }
-<p>@Html.ActionLink("Back to list", "Index")</p>
+<br>
+<p>@Html.ActionLink("Back to Departments", "Index")</p>
+<p>@Html.ActionLink("Home", "Index", "Home")</p>
+</div>

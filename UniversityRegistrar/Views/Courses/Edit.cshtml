@@ -3,7 +3,8 @@
 }
 
 @model UniversityRegistrar.Models.Course
-
+<div class="container">
+<br>
 <h2>Edit</h2>
 
 <h4>Edit this course: @Html.DisplayFor(model => model.Name)</h4>
@@ -20,4 +21,7 @@
 
   <input type="submit" value="Save" />
 }
-<p>@Html.ActionLink("Back to list", "Index")</p>
+<br>
+<p>@Html.ActionLink("Back to Courses", "Index")</p>
+<p>@Html.ActionLink("Home", "Index", "Home")</p>
+</div>

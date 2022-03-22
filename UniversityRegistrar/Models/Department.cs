@@ -6,11 +6,11 @@ namespace UniversityRegistrar.Models
   {
     public Department()
     {
-      this.JoinEntities = new HashSet<CourseDepartmentStudent>();
+      this.Courses = new HashSet<CourseDepartmentStudent>();
     }
 
     public int DepartmentId { get; set; }
     public string DepartmentName { get; set; }
-    public virtual ICollection<CourseDepartmentStudent> JoinEntities { get; set; }
+    public virtual ICollection<CourseDepartmentStudent> Courses { get; set; }
   }
 }

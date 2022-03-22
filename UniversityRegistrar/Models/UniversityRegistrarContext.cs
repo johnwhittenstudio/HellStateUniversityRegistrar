@@ -7,13 +7,8 @@ namespace UniversityRegistrar.Models
     public DbSet<Course> Courses { get; set; }
     public DbSet<Department> Departments { get; set; }
     public DbSet<Student> Students { get; set; }
-    public DbSet<CourseDepartmentStudent> CourseDepartmentStudent { get; set; }
+    public DbSet<CourseDepartmentStudent> CourseDepartmentStudents { get; set; }
 
     public UniversityRegistrarContext(DbContextOptions options) : base(options) { }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-      optionsBuilder.UseLazyLoadingProxies();
-    }
   }
 }

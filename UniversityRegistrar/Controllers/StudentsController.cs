@@ -23,60 +23,40 @@ namespace UniversityRegistrar.Controllers
 
     public ActionResult Create()
     {
-      ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "Name");
-      ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "DepartmentName");
       return View();
     }
 
     [HttpPost]
-    public ActionResult Create(Student student, int CourseId, int DepartmentId)
+    public ActionResult Create(Student student)
     {
       _db.Students.Add(student);
       _db.SaveChanges();
-      if (CourseId != 0)
-      {
-        _db.CourseDepartmentStudent.Add(new CourseDepartmentStudent() { CourseId = CourseId, StudentId = student.StudentId });
-        _db.SaveChanges();
-      }
-      else if (DepartmentId != 0)
-      {
-        _db.CourseDepartmentStudent.Add(new CourseDepartmentStudent() { DepartmentId = DepartmentId, StudentId = student.StudentId });
-        _db.SaveChanges();
-      }
       return RedirectToAction("Index");
     }
+    
 
     public ActionResult Details(int id)
     {
       var thisStudent = _db.Students
-          .Include(student => student.JoinEntities)
+          .Include(student => student.Courses)
           .ThenInclude(join => join.Course)
-          .Include(student => student.JoinEntities)
-          .ThenInclude(join => join.Department)
           .FirstOrDefault(student => student.StudentId == id);
       return View(thisStudent);
     }
 
     public ActionResult Edit(int id)
     {
-      var thisStudent = _db.Students.FirstOrDefault(student => student.StudentId == id);
-      ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "Name");
-      ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "DepartmentName");
+      var thisStudent = _db.Students.FirstOrDefault(students => students.StudentId == id);
+      ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "Name", "CourseNumber");
       return View(thisStudent);
     }
 
     [HttpPost]
-    public ActionResult Edit(Student student, int CourseId, int DepartmentId)
+    public ActionResult Edit(Student student, int CourseId)
     {
       if (CourseId != 0)
       {
-      _db.CourseDepartmentStudent.Add(new CourseDepartmentStudent() { CourseId = CourseId, StudentId = student.StudentId });
-      _db.Entry(student).State = EntityState.Modified;
-      _db.SaveChanges();
-      }
-      else if (DepartmentId != 0)
-      {
-        _db.CourseDepartmentStudent.Add(new CourseDepartmentStudent() { DepartmentId = DepartmentId, StudentId = student.StudentId });        
+      _db.CourseDepartmentStudents.Add(new CourseDepartmentStudent() { CourseId = CourseId, StudentId = student.StudentId });
       }
       _db.Entry(student).State = EntityState.Modified;
       _db.SaveChanges();
@@ -85,8 +65,8 @@ namespace UniversityRegistrar.Controllers
 
     public ActionResult AddCourse(int id)
     {
-      var thisStudent = _db.Students.FirstOrDefault(student => student.StudentId == id);
-      ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "Name");
+      var thisStudent = _db.Students.FirstOrDefault(students => students.StudentId == id);
+      ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "Name", "CourseNumber");
       return View(thisStudent);
     }
 
@@ -96,60 +76,38 @@ namespace UniversityRegistrar.Controllers
     {
       if (CourseId != 0)
       {
-        _db.CourseDepartmentStudent.Add(new CourseDepartmentStudent() { CourseId = CourseId, StudentId = student.StudentId });
-        _db.SaveChanges();
+        _db.CourseDepartmentStudents.Add(new CourseDepartmentStudent() { CourseId = CourseId, StudentId = student.StudentId });
       }
-      return RedirectToAction("Index");
-    }
-
-
-    public ActionResult AddDepartment(int id)
-    {
-      var thisStudent = _db.Students.FirstOrDefault(student => student.StudentId == id);
-      ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "DepartmentName");
-      return View(thisStudent);
-    }
-
-    [HttpPost]
-    public ActionResult AddDepartment(Student student, int CourseId, int DepartmentId)
-    {
-      if (DepartmentId != 0)
-      {
-        _db.CourseDepartmentStudent.Add(new CourseDepartmentStudent() { DepartmentId = DepartmentId, CourseId = CourseId });
-        _db.SaveChanges();
-      }
+      _db.SaveChanges();
       return RedirectToAction("Index");
     }
 
     public ActionResult Delete(int id)
     {
-      var thisStudent = _db.Students.FirstOrDefault(student => student.StudentId == id);
+      var thisStudent = _db.Students.FirstOrDefault(students => students.StudentId == id);
       return View(thisStudent);
     }
 
     [HttpPost, ActionName("Delete")]
     public ActionResult DeleteConfirmed(int id)
     {
-      var thisStudent = _db.Students.FirstOrDefault(student => student.StudentId == id);
+      var thisStudent = _db.Students.FirstOrDefault(students => students.StudentId == id);
+      List<CourseDepartmentStudent> joins = _db.CourseDepartmentStudents.Where(join => join.StudentId == id).ToList();
+      foreach (CourseDepartmentStudent join in joins) 
+      {
+        _db.CourseDepartmentStudents.Remove(join);
+      }
       _db.Students.Remove(thisStudent);
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
+    
 
     [HttpPost]
     public ActionResult DeleteCourse(int joinId)
     {
-      var joinEntry = _db.CourseDepartmentStudent.FirstOrDefault(entry => entry.CourseDepartmentStudentId == joinId);
-      _db.CourseDepartmentStudent.Remove(joinEntry);
-      _db.SaveChanges();
-      return RedirectToAction("Index");
-    }
-
-    [HttpPost]
-    public ActionResult DeleteDepartment(int joinId)
-    {
-      var joinEntry = _db.CourseDepartmentStudent.FirstOrDefault(entry => entry.CourseDepartmentStudentId == joinId);
-      _db.CourseDepartmentStudent.Remove(joinEntry);
+      var joinEntry = _db.CourseDepartmentStudents.FirstOrDefault(entry => entry.CourseDepartmentStudentId == joinId);
+      _db.CourseDepartmentStudents.Remove(joinEntry);
       _db.SaveChanges();
       return RedirectToAction("Index");
     }

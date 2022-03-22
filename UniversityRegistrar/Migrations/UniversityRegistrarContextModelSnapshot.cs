@@ -56,7 +56,7 @@ namespace UniversityRegistrar.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("CourseDepartmentStudent");
+                    b.ToTable("CourseDepartmentStudents");
                 });
 
             modelBuilder.Entity("UniversityRegistrar.Models.Department", b =>
@@ -93,19 +93,19 @@ namespace UniversityRegistrar.Migrations
             modelBuilder.Entity("UniversityRegistrar.Models.CourseDepartmentStudent", b =>
                 {
                     b.HasOne("UniversityRegistrar.Models.Course", "Course")
-                        .WithMany("JoinEntities")
+                        .WithMany("JoinEntries")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("UniversityRegistrar.Models.Department", "Department")
-                        .WithMany("JoinEntities")
+                        .WithMany("Courses")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("UniversityRegistrar.Models.Student", "Student")
-                        .WithMany("JoinEntities")
+                        .WithMany("Courses")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -119,17 +119,17 @@ namespace UniversityRegistrar.Migrations
 
             modelBuilder.Entity("UniversityRegistrar.Models.Course", b =>
                 {
-                    b.Navigation("JoinEntities");
+                    b.Navigation("JoinEntries");
                 });
 
             modelBuilder.Entity("UniversityRegistrar.Models.Department", b =>
                 {
-                    b.Navigation("JoinEntities");
+                    b.Navigation("Courses");
                 });
 
             modelBuilder.Entity("UniversityRegistrar.Models.Student", b =>
                 {
-                    b.Navigation("JoinEntities");
+                    b.Navigation("Courses");
                 });
 #pragma warning restore 612, 618
         }

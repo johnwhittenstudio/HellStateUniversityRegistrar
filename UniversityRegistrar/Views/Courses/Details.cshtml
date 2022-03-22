@@ -3,27 +3,50 @@
 }
 
 @model UniversityRegistrar.Models.Course;
-
+<div class="container">
+<br>
 <h2>Course Details</h2>
 <hr />
 <h3>@Html.DisplayNameFor(model => model.Name): @Html.DisplayFor(model => model.Name)</h3>
 <h5>@Html.DisplayNameFor(model => model.CourseNumber): @Html.DisplayFor(model => model.CourseNumber)</h5>
 
-@if(@Model.JoinEntities.Count == 0)
+@if(@Model.JoinEntries.Count == 0)
 {
-  <p>This course does not contain any students</p>
+  <p>This course does not belong to any Departments or contain any students</p>
 }
 else
 {
-  <h4>Students the course contains:</h4>
+  <h4>Students enrolled in this course:</h4>
   <ul>
-  @foreach(var join in Model.JoinEntities)
+  @foreach(var join in Model.JoinEntries)
   {
-    <li>@join.Student.Name</li>
+    if (join.Department != null)
+    {
+      <li>Department: @join.Department.DepartmentName</li>
+      @using (Html.BeginForm("DeleteJoin", "Courses"))
+      {
+        @Html.Hidden("joinId", @join.CourseDepartmentStudentId)
+        <input type="submit" value="Delete"/>
+      }
+    }
+    else 
+    {
+      <li>Student: @join.Student.Name</li>
+      @using (Html.BeginForm("DeleteJoin", "Courses"))
+      {
+        @Html.Hidden("joinId", @join.CourseDepartmentStudentId)
+        <input type="submit" value="Delete"/>
+      }
+    }
   }
   </ul>
 }
 
-<p>@Html.ActionLink("Back to courses", "Index")</p>
+<br>
 <p>@Html.ActionLink("Edit Course", "Edit", new { id = Model.CourseId })</p>
+<p>@Html.ActionLink("Add a Department", "AddDepartment", new { id = Model.CourseId })</p>
+<p>@Html.ActionLink("Add a Student", "AddStudent", new { id = Model.CourseId })</p>
 <p>@Html.ActionLink("Delete Course", "Delete", new { id = Model.CourseId })</p>
+<p>@Html.ActionLink("Back to Courses", "Index")</p>
+<p>@Html.ActionLink("Home", "Index", "Home")</p>
+</div>

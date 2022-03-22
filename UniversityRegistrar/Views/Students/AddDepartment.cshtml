@@ -3,19 +3,22 @@
 }
 
 @model UniversityRegistrar.Models.Student
+<div class="container">
+<br>
+<h2>Add to Department</h2>
 
-<h2>Add a department</h2>
-
-<h4>Add a department to this student: @Html.DisplayFor(model => model.Name)</h4>
+<h4>Add this Student to a Department: @Html.DisplayFor(model => model.Name)</h4>
 
 @using (Html.BeginForm())
 {
   @Html.HiddenFor(model => model.StudentId)
 
-  @Html.Label("Select department")
-  @Html.DropDownList("departmentId")
+  @Html.Label("Select Department")
+  @Html.DropDownList("DepartmentId")
 
   <input type="submit" value="Save" />
 }
-
-<p>@Html.ActionLink("Back to list", "Index")</p>
+<br>
+<p>@Html.ActionLink("Back to Students", "Index")</p>
+<p>@Html.ActionLink("Home", "Index", "Home")</p>
+</div>
