@@ -8,7 +8,7 @@
 <h2>Department Details</h2>
 <hr />
 <h3>@Html.DisplayNameFor(model => model.DepartmentName): @Html.DisplayFor(model => model.DepartmentName)</h3>
-
+<br>
 @if(@Model.Courses.Count == 0)
 {
   <p>This Department does not currently offer any courses</p>
@@ -20,7 +20,7 @@ else
   @foreach(var join in Model.Courses)
   {
     <li>@join.Course.Name</li>
-      @using (Html.BeginForm("DeleteCourse", "Students"))
+      @using (Html.BeginForm("DeleteCourse", "Departments"))
       {
         @Html.Hidden("joinId", @join.CourseDepartmentStudentId)
         <input type="submit" value="Delete" />

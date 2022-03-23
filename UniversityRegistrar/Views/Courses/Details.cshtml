@@ -9,6 +9,7 @@
 <hr />
 <h3>@Html.DisplayNameFor(model => model.Name): @Html.DisplayFor(model => model.Name)</h3>
 <h5>@Html.DisplayNameFor(model => model.CourseNumber): @Html.DisplayFor(model => model.CourseNumber)</h5>
+<br>
 
 @if(@Model.JoinEntries.Count == 0)
 {
@@ -16,12 +17,12 @@
 }
 else
 {
-  <h4>Students enrolled in this course:</h4>
   <ul>
   @foreach(var join in Model.JoinEntries)
   {
     if (join.Department != null)
     {
+      <h4>Department this course is assigned to:</h4>
       <li>Department: @join.Department.DepartmentName</li>
       @using (Html.BeginForm("DeleteJoin", "Courses"))
       {
@@ -31,6 +32,7 @@ else
     }
     else 
     {
+      <h4>Student enrolled in this course:</h4>
       <li>Student: @join.Student.Name</li>
       @using (Html.BeginForm("DeleteJoin", "Courses"))
       {
@@ -41,6 +43,8 @@ else
   }
   </ul>
 }
+
+
 
 <br>
 <p>@Html.ActionLink("Edit Course", "Edit", new { id = Model.CourseId })</p>
